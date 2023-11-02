@@ -12,6 +12,7 @@ import MicIcon from '@/assets/icons/mic.svg?react';
 import MenuIcon from '@/assets/icons/menu.svg?react';
 import CloseIcon from '@/assets/icons/close.svg?react';
 import SearchIcon from '@/assets/icons/search.svg?react';
+import Tooltip from '@/common/tooltip';
 
 const FOLDERS_PATH = '/dashboard/folders';
 const ACTIVITY_PATH = '/dashboard/activities';
@@ -46,19 +47,17 @@ const NotificationsButton = () => (
 );
 
 const SearchBox = ({ expanded }) => (
-  <div
-    className={classNames(
-      'h-11 px-[0.875rem] flex items-center gap-2 rounded-full transition-all ease-out text-sm border border-dashed border-border-lm-main',
-    )}
-  >
-    <SearchIcon className='w-auto h-4' />
-    {expanded && 'Area for search box'}
-  </div>
+  <Tooltip title='Search' position='right' disabled={expanded}>
+    <div
+      className={classNames(
+        'h-11 px-[0.875rem] flex items-center gap-2 rounded-full transition-all ease-out text-sm border border-dashed border-border-lm-main',
+      )}
+    >
+      <SearchIcon className='w-auto h-4' />
+      {expanded && 'Area for search box'}
+    </div>
+  </Tooltip>
 );
-
-SearchBox.propTypes = {
-  expanded: PropTypes.bool,
-};
 
 const NavLinks = ({ expanded }) => {
   // replace this with pathname from react-router-dom
@@ -72,25 +71,27 @@ const NavLinks = ({ expanded }) => {
         return (
           <li key={path}>
             {/* replace this with Link from react-router-dom */}
-            <a
-              href={path}
-              onClick={(e) => {
-                e.preventDefault();
-                setMockRouterPath(path);
-              }}
-              className={classNames(
-                'relative h-11 px-[0.875rem] flex items-center justify-center md:justify-start gap-2 rounded-full transition-all ease-out text-sm',
-                isActive
-                  ? 'bg-bg-decor-light-orange text-text-lm-link hover:text-text-lm-link'
-                  : 'hover:bg-bg-decor-light-gray text-text-lm-subtitle hover:text-text-lm-subtitle',
-              )}
-            >
-              <Icon className='hidden md:inline-block w-auto h-4' />
-              {isActive && (
-                <span className='absolute -left-2.5 w-[3px] rounded-full h-[18px] bg-border-lm-highlight-1'></span>
-              )}
-              {expanded && label}
-            </a>
+            <Tooltip title={label} position='right' disabled={expanded}>
+              <a
+                href={path}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setMockRouterPath(path);
+                }}
+                className={classNames(
+                  'relative h-11 px-[0.875rem] flex items-center justify-center md:justify-start gap-2 rounded-full transition-all ease-out text-sm',
+                  isActive
+                    ? 'bg-bg-decor-light-orange text-text-lm-link hover:text-text-lm-link'
+                    : 'hover:bg-bg-decor-light-gray text-text-lm-subtitle hover:text-text-lm-subtitle',
+                )}
+              >
+                <Icon className='hidden md:inline-block w-auto h-4' />
+                {isActive && (
+                  <span className='absolute -left-2.5 w-[3px] rounded-full h-[18px] bg-border-lm-highlight-1'></span>
+                )}
+                {expanded && label}
+              </a>
+            </Tooltip>
           </li>
         );
       })}
@@ -98,8 +99,47 @@ const NavLinks = ({ expanded }) => {
   );
 };
 
-NavLinks.propTypes = {
-  expanded: PropTypes.bool,
+const AccountSection = ({ expanded }) => {
+  const avatarClasses =
+    'flex items-center justify-center rounded-full shrink-0 bg-bg-decor-light-gray border border-border-lm-main text-text-lm-heading w-11 h-11';
+
+  const handleToggleAccountMenu = () => {
+    // replace with trigger menu
+    alert('toggle profile settings');
+  };
+
+  return (
+    <div className='flex items-center gap-2'>
+      {expanded ? (
+        <div className={avatarClasses}>LL</div>
+      ) : (
+        <Tooltip title='Account' position='right' disabled={expanded}>
+          <button
+            aria-label='Toggle account menu'
+            className={avatarClasses}
+            onClick={handleToggleAccountMenu}
+          >
+            LL
+          </button>
+        </Tooltip>
+      )}
+      {expanded && (
+        <>
+          <div className='grow'>
+            <h3 className='font-semibold text-sm'>Lincoln Levin</h3>
+            <p className='font-medium text-xs'>Software Engineer</p>
+          </div>
+          <button
+            aria-label='Toggle account menu'
+            className='p-1 bg-transparent'
+            onClick={handleToggleAccountMenu}
+          >
+            <MoreHorizontalIcon className='w-auto h-5' />
+          </button>
+        </>
+      )}
+    </div>
+  );
 };
 
 const Sidebar = () => {
@@ -112,6 +152,11 @@ const Sidebar = () => {
 
   const handleToggleSidebarMobile = () => {
     setMobileExpanded(!mobileExpanded);
+  };
+
+  const handleLogout = () => {
+    // replace with logout
+    alert('logout');
   };
 
   return (
@@ -128,43 +173,40 @@ const Sidebar = () => {
         </div>
         <div className='relative'>
           <hr />
-          <button
-            aria-label='Expand sidebar'
-            onClick={handleToggleSidebarDesktop}
-            className={classNames(
-              '-mt-3 float-right flex items-center justify-center border-border-lm-main bg-bg-lm-white h-6 w-6 rounded-full p-0 transition-transform ease-out',
-              desktopExpanded ? '-mr-2.5' : 'transform rotate-180 -mr-3',
-            )}
+          <Tooltip
+            className='-mr-3 -mt-3 float-right'
+            title={desktopExpanded ? 'Collapse' : 'Expand'}
+            position='right'
           >
-            <ArrowLeftIcon className='w-auto h-6' />
-          </button>
+            <button
+              aria-label='Toggle sidebar'
+              onClick={handleToggleSidebarDesktop}
+              className={classNames(
+                'flex items-center justify-center border-border-lm-main bg-bg-lm-white h-6 w-6 rounded-full p-0 transition-transform ease-out',
+                { 'transform rotate-180': desktopExpanded },
+              )}
+            >
+              <ArrowLeftIcon className='w-auto h-6' />
+            </button>
+          </Tooltip>
         </div>
         <div className='py-4 px-6'>
           <div>
-            <div className='flex items-center gap-2'>
-              <div className='flex items-center justify-center rounded-full shrink-0 bg-bg-decor-light-gray border border-border-lm-main text-text-lm-heading w-11 h-11'>
-                LL
-              </div>
-              {desktopExpanded && (
-                <>
-                  <div className='grow'>
-                    <h3 className='font-semibold text-sm'>Lincoln Levin</h3>
-                    <p className='font-medium text-xs'>Software Engineer</p>
-                  </div>
-                  <button
-                    aria-label='More profile options'
-                    className='p-1 bg-transparent'
-                  >
-                    <MoreHorizontalIcon className='w-auto h-5' />
-                  </button>
-                </>
-              )}
-            </div>
+            <AccountSection expanded={desktopExpanded} />
             <div className='mt-4'>
-              <button className='flex gap-2 items-center justify-center h-11 w-full rounded-full text-text-dm-heading bg-bg-decor-primary font-normal text-sm'>
-                <MicIcon className='w-auto h-4 shrink-0' />
-                {desktopExpanded && 'New recording'}
-              </button>
+              <Tooltip
+                title='New recording'
+                position='right'
+                disabled={desktopExpanded}
+              >
+                <button
+                  aria-label='New recording'
+                  className='flex gap-2 items-center justify-center h-11 w-full rounded-full text-text-dm-heading bg-bg-decor-primary font-normal text-sm'
+                >
+                  <MicIcon className='w-auto h-4 shrink-0' />
+                  {desktopExpanded && 'New recording'}
+                </button>
+              </Tooltip>
             </div>
           </div>
           <hr className='my-4' />
@@ -202,7 +244,7 @@ const Sidebar = () => {
           <div className='mt-5 mb-3'>
             <SearchBox expanded />
           </div>
-          <NavLinks expanded={mobileExpanded} />
+          <NavLinks expanded />
           <hr className='my-3' />
           <a
             href='#profile-settings'
@@ -214,6 +256,7 @@ const Sidebar = () => {
           <button
             href='#profile-settings'
             className='w-full text-center px-6 py-4 text-sm bg-transparent focus:outline-none hover:ring-0 border-none hover:text-text-lm-link'
+            onClick={handleLogout}
           >
             Log out
           </button>
@@ -221,6 +264,18 @@ const Sidebar = () => {
       </nav>
     </>
   );
+};
+
+SearchBox.propTypes = {
+  expanded: PropTypes.bool,
+};
+
+NavLinks.propTypes = {
+  expanded: PropTypes.bool,
+};
+
+AccountSection.propTypes = {
+  expanded: PropTypes.bool,
 };
 
 export default Sidebar;

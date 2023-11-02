@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./src/**/*.{html,jsx}"],
+  content: ['./src/**/*.{html,jsx}'],
   theme: {
     extend: {
       colors: {
@@ -11,11 +11,12 @@ export default {
             primary: '#FF7246',
           },
           lm: {
-            white: '#FFFFFF'
+            white: '#FFFFFF',
           },
           dm: {
             black: '#000000',
-          }
+            overlay: '#000000E5',
+          },
         },
         text: {
           lm: {
@@ -26,17 +27,18 @@ export default {
             body: '#212A3F',
           },
           dm: {
-            heading: '#FFFFFF'
-          }
+            heading: '#FFFFFF',
+            body: '#FFFFFF',
+          },
         },
         border: {
           lm: {
             'highlight-1': '#FF6838',
             main: '#EAEDF5',
-          }
-        }
-      }
+          },
+        },
+      },
     },
   },
   plugins: [],
-}
+};
