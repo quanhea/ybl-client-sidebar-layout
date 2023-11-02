@@ -79,13 +79,16 @@ const NavLinks = ({ expanded }) => {
                 setMockRouterPath(path);
               }}
               className={classNames(
-                'h-11 px-[0.875rem] flex items-center justify-center md:justify-start gap-2 rounded-full transition-all ease-out text-sm',
+                'relative h-11 px-[0.875rem] flex items-center justify-center md:justify-start gap-2 rounded-full transition-all ease-out text-sm',
                 isActive
                   ? 'bg-bg-decor-light-orange text-text-lm-link hover:text-text-lm-link'
                   : 'hover:bg-bg-decor-light-gray text-text-lm-subtitle hover:text-text-lm-subtitle',
               )}
             >
               <Icon className='hidden md:inline-block w-auto h-4' />
+              {isActive && (
+                <span className='absolute -left-2.5 w-[3px] rounded-full h-[18px] bg-border-lm-highlight-1'></span>
+              )}
               {expanded && label}
             </a>
           </li>
