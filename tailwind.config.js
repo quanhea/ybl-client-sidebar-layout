@@ -12,6 +12,9 @@ export default {
           },
           lm: {
             white: '#FFFFFF'
+          },
+          dm: {
+            black: '#000000',
           }
         },
         text: {
